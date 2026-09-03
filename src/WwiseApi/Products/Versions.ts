@@ -134,7 +134,7 @@ export default class Versions {
 
 	async bundles_by_category(
 		jwt: string,
-		category: BundleType,
+		category: BundleType & 'wwise',
 		validate_verified_payload: (
 			maybe: unknown,
 		) => maybe is by_category_response,
