@@ -132,7 +132,7 @@ export default class Versions {
 		this.#package_version = package_version;
 	}
 
-	async by_category(
+	async bundles_by_category(
 		jwt: string,
 		category: BundleType,
 		validate_verified_payload: (
