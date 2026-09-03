@@ -1,13 +1,21 @@
 {
   "type": "module",
-  "name": "@signpostmarv/nodejs-template",
-  "description": "nodejs template",
+  "name": "@satisfactory-dev/ak-launcher",
+  "description": "A workaround for the AudioKinetic Launcher not being easy to run in a devcontainer",
+  "keywords": [
+    "wwise",
+    "wwise-cli",
+    "wwise-launcher",
+    "audiokinetic",
+    "devcontainer"
+  ],
   "license": "Apache-2.0",
+  "author": "SignpostMarv",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SignpostMarv/nodejs-template.git"
+    "url": "git+https://github.com/satisfactory-dev/ak-launcher.git"
   },
-  "funding": "https://github.com/SignpostMarv/nodejs-template?sponsor=1",
+  "funding": "https://github.com/satisfactory-dev/ak-launcher?sponsor=1",
   "exports": "./index.js",
   "types": "./index.d.ts",
   "devDependencies": {

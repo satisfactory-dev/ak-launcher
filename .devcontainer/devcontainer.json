@@ -1,5 +1,5 @@
 {
-	"name": "nodejs template",
+	"name": "@satisfactory-dev/ak-launcher",
 	"dockerComposeFile": "./docker-compose.yml",
 	"service": "devcontainer",
 	"workspaceFolder": "/app/",
