@@ -132,17 +132,13 @@ export default class Versions {
 		this.#package_version = package_version;
 	}
 
-	async bundles_by_category(
+	async #api_call<T>(
 		jwt: string,
-		category: BundleType & 'wwise',
-		validate_verified_payload: (
-			maybe: unknown,
-		) => maybe is by_category_response,
+		url: `https://blob-api.gowwise.com/${Exclude<string, ''>}`,
+		validate_verified_payload?: (maybe: unknown) => maybe is T,
 	) {
-		const result: unknown = await (await fetch(
-			`https://blob-api.gowwise.com/products/versions/?category=${
-				encodeURIComponent(category)
-			}`,
+		const result = await (await fetch(
+			url,
 			{
 				headers: {
 					Authorization: `Bearer ${jwt}`,
@@ -151,10 +147,32 @@ export default class Versions {
 			},
 		)).json();
 
+		if (validate_verified_payload) {
 		return AudiokineticPayload.from_unverified<
-			by_category_response
+				T
 		>(
 			result,
+			validate_verified_payload,
+		);
+		}
+
+		return AudiokineticPayload.from_unverified(
+			result,
+		);
+	}
+
+	bundles_by_category(
+		jwt: string,
+		category: BundleType & 'wwise',
+		validate_verified_payload: (
+			maybe: unknown,
+		) => maybe is by_category_response,
+	) {
+		return this.#api_call(
+			jwt,
+			`https://blob-api.gowwise.com/products/versions/?category=${
+				encodeURIComponent(category)
+			}`,
 			validate_verified_payload,
 		);
 	}
