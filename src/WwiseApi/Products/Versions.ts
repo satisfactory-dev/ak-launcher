@@ -148,12 +148,12 @@ export default class Versions {
 		)).json();
 
 		if (validate_verified_payload) {
-		return AudiokineticPayload.from_unverified<
+			return AudiokineticPayload.from_unverified<
 				T
-		>(
-			result,
-			validate_verified_payload,
-		);
+			>(
+				result,
+				validate_verified_payload,
+			);
 		}
 
 		return AudiokineticPayload.from_unverified(
