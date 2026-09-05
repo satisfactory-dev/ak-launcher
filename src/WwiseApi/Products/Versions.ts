@@ -1,4 +1,7 @@
-import AudiokineticPayload from '../../AudiokineticPayload.ts';
+import type {
+	SuccessfulResponse,
+} from '../AbstractApi.ts';
+import AbstractApi from '../AbstractApi.ts';
 
 type BundleType = (
 	| 'wwise'
@@ -378,58 +381,15 @@ type Version = (
 	)
 );
 
-export type by_category_response = {
-	statusCode: 200,
-	data: {
+export type by_category_response = SuccessfulResponse<{
 		bundles: [Bundle, ...Bundle[]],
-	},
-};
+}>;
 
-export type bundle_by_id_response = {
-	statusCode: 200,
-	data: {
+export type bundle_by_id_response = SuccessfulResponse<{
 		bundles: [Version, ...Version[]],
-	},
-};
+}>;
 
-export default class Versions {
-	readonly #package_version: string;
-
-	constructor(
-		package_version: string,
-	) {
-		this.#package_version = package_version;
-	}
-
-	async #api_call<T>(
-		jwt: string,
-		url: `https://blob-api.gowwise.com/${Exclude<string, ''>}`,
-		validate_verified_payload?: (maybe: unknown) => maybe is T,
-	) {
-		const result: unknown = await (await fetch(
-			url,
-			{
-				headers: {
-					Authorization: `Bearer ${jwt}`,
-					'X-client-version': this.#package_version,
-				},
-			},
-		)).json();
-
-		if (validate_verified_payload) {
-			return AudiokineticPayload.from_unverified<
-				T
-			>(
-				result,
-				validate_verified_payload,
-			);
-		}
-
-		return AudiokineticPayload.from_unverified(
-			result,
-		);
-	}
-
+export default class Versions extends AbstractApi {
 	bundles_by_category(
 		jwt: string,
 		category: BundleType & 'wwise',
@@ -437,7 +397,7 @@ export default class Versions {
 			maybe: unknown,
 		) => maybe is by_category_response,
 	) {
-		return this.#api_call(
+		return this.api_call(
 			jwt,
 			`https://blob-api.gowwise.com/products/versions/?category=${
 				encodeURIComponent(category)
@@ -453,7 +413,7 @@ export default class Versions {
 			maybe: unknown,
 		) => maybe is bundle_by_id_response,
 	) {
-		return this.#api_call(
+		return this.api_call(
 			jwt,
 			`https://blob-api.gowwise.com/v4/products/versions/${
 				encodeURIComponent(id)
