@@ -104,15 +104,15 @@ type BundleBase = VersionCommonBase & {
 
 type VersionLauncherBase = (
 	& VersionCommonBase
-		& {
-			launcher: {
-				minimumRequiredVersion: {
-					major: number,
-					minor: number,
-					year: number,
-				},
+	& {
+		launcher: {
+			minimumRequiredVersion: {
+				major: number,
+				minor: number,
+				year: number,
 			},
-		}
+		},
+	}
 );
 
 type Bundle = (
