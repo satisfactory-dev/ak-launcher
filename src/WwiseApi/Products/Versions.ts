@@ -382,11 +382,11 @@ type Version = (
 );
 
 export type by_category_response = SuccessfulResponse<{
-		bundles: [Bundle, ...Bundle[]],
+	bundles: [Bundle, ...Bundle[]],
 }>;
 
 export type bundle_by_id_response = SuccessfulResponse<{
-		bundles: [Version, ...Version[]],
+	bundles: [Version, ...Version[]],
 }>;
 
 export default class Versions extends AbstractApi {
