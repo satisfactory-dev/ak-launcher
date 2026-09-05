@@ -45,6 +45,20 @@ type ProductDependentDataWithPlugins = (
 	}
 );
 
+export type nicknamed_version<
+	nickname extends string = string,
+	year extends number = number,
+	major extends number = number,
+	minor extends number = number,
+	build extends number = number,
+> = {
+	build: build,
+	major: major,
+	minor: minor,
+	nickname: nickname,
+	year: year,
+};
+
 type VersionCommonBase = {
 	id: Exclude<string, ''>,
 	tag: Exclude<string, ''>,
@@ -70,13 +84,7 @@ type VersionCommonBase = {
 		)
 	),
 	vendor: Exclude<string, ''>,
-	version: {
-		build: number,
-		major: number,
-		minor: number,
-		nickname: Exclude<string, ''>,
-		year: number,
-	},
+	version: nicknamed_version<Exclude<string, ''>>,
 	links: [Link, ...Link[]],
 	$checked: null,
 	$unlocked: null,

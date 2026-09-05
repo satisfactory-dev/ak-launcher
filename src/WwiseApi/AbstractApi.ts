@@ -16,6 +16,15 @@ export default abstract class AbstractApi {
 		this.#package_version = package_version;
 	}
 
+	protected async api_call(
+		jwt: string,
+		url: `https://blob-api.gowwise.com/${Exclude<string, ''>}`,
+	): Promise<unknown>;
+	protected async api_call<T>(
+		jwt: string,
+		url: `https://blob-api.gowwise.com/${Exclude<string, ''>}`,
+		validate_verified_payload: (maybe: unknown) => maybe is T,
+	): Promise<T>;
 	protected async api_call<T>(
 		jwt: string,
 		url: `https://blob-api.gowwise.com/${Exclude<string, ''>}`,

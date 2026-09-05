@@ -1,5 +1,5 @@
 {
-	"$id": "ak-launcher/WwiseApi/Products/Version",
+	"$id": "https://satisfactory.dev/ak-launcher/WwiseApi/Products/Version.schema.json",
 	"type": "object",
 	"required": ["statusCode", "data"],
 	"additionalProperties": false,
@@ -25,6 +25,38 @@
 		"filename_exe": {
 			"type": "string",
 			"pattern": "^([A-Za-z0-9][A-Za-z0-9_-]*\\.)+exe$"
+		},
+		"nicknamed_version": {
+			"type": "object",
+			"required": [
+				"build",
+				"major",
+				"minor",
+				"nickname",
+				"year"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"build": {
+					"type": "integer",
+					"minimum": 1
+				},
+				"major": {
+					"type": "integer",
+					"minimum": 0
+				},
+				"minor": {
+					"type": "integer",
+					"minimum": 0
+				},
+				"nickname": {
+					"type": "string"
+				},
+				"year": {
+					"type": "integer",
+					"minimum": 2000
+				}
+			}
 		},
 		"crossoverBottleName": {
 			"type": "string",
@@ -148,36 +180,7 @@
 					"minLength": 1
 				},
 				"version": {
-					"type": "object",
-					"required": [
-						"build",
-						"major",
-						"minor",
-						"nickname",
-						"year"
-					],
-					"additionalProperties": false,
-					"properties": {
-						"build": {
-							"type": "integer",
-							"minimum": 1
-						},
-						"major": {
-							"type": "integer",
-							"minimum": 0
-						},
-						"minor": {
-							"type": "integer",
-							"minimum": 0
-						},
-						"nickname": {
-							"type": "string"
-						},
-						"year": {
-							"type": "integer",
-							"minimum": 2000
-						}
-					}
+					"$ref": "#/$defs/nicknamed_version"
 				},
 				"links": {
 					"type": "array",

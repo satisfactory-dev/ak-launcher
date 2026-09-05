@@ -1,0 +1,59 @@
+{
+	"$id": "https://satisfactory.dev/ak-launcher/WwiseApi/Products/Launcher.schema.json",
+	"type": "object",
+	"required": ["statusCode", "data"],
+	"additionalProperties": false,
+	"properties": {
+		"statusCode": {
+			"type": "integer",
+			"const": 200
+		},
+		"data": {
+			"type": "object",
+			"required": ["filesUrl", "version"],
+			"additionalProperties": false,
+			"properties": {
+				"filesUrl": {
+					"type": "array",
+					"minItems": 2,
+					"maxItems": 2,
+					"prefixItems": [
+						{
+							"type": "object",
+							"required": ["name", "url"],
+							"additionalProperties": false,
+							"properties": {
+								"name": {
+									"type": "string",
+									"pattern": "^AudiokineticLauncher-\\d+\\.\\d+\\.\\d+\\.\\d+\\.pkg$"
+								},
+								"url": {
+									"type": "string",
+									"pattern": "^https:\/\/blob-api-builds.gowwise.com\/Launcher_\\d+\\.\\d+\\.\\d+\\.\\d+\/AudiokineticLauncher-\\d+\\.\\d+\\.\\d+\\.\\d+\\.pkg\\?Expires=\\d+&Policy=[A-Za-z0-9_~-]+&Signature=[A-Za-z0-9_~-]+&Key-Pair-Id=[A-Z0-9]+$"
+								}
+							}
+						},
+						{
+							"type": "object",
+							"required": ["name", "url"],
+							"additionalProperties": false,
+							"properties": {
+								"name": {
+									"type": "string",
+									"pattern": "^AudiokineticLauncher-\\d+\\.\\d+\\.\\d+\\.\\d+\\.exe$"
+								},
+								"url": {
+									"type": "string",
+									"pattern": "^https:\/\/blob-api-builds.gowwise.com\/Launcher_\\d+\\.\\d+\\.\\d+\\.\\d+\/AudiokineticLauncher-\\d+\\.\\d+\\.\\d+\\.\\d+\\.exe\\?Expires=\\d+&Policy=[A-Za-z0-9_~-]+&Signature=[A-Za-z0-9_~-]+&Key-Pair-Id=[A-Z0-9]+$"
+								}
+							}
+						}
+					]
+				},
+				"version": {
+					"$ref": "https://satisfactory.dev/ak-launcher/WwiseApi/Products/Version.schema.json#/$defs/nicknamed_version"
+				}
+			}
+		}
+	}
+}

@@ -1,12 +1,12 @@
 {
-	"$id": "ak-launcher/WwiseApi/Products/Versions",
+	"$id": "https://satisfactory.dev/https://satisfactory.dev/ak-launcher/WwiseApi/Products/Version.schema.jsons.schema.json",
 	"type": "object",
 	"required": ["statusCode", "data"],
 	"additionalProperties": false,
 	"$defs": {
 		"item": {
 			"type": "object",
-			"$ref": "ak-launcher/WwiseApi/Products/Versions#/$defs/item",
+			"$ref": "https://satisfactory.dev/https://satisfactory.dev/ak-launcher/WwiseApi/Products/Version.schema.jsons.schema.json#/$defs/item",
 			"required": [
 				"versionTag",
 				"published",
@@ -106,7 +106,7 @@
 					"type": "array",
 					"minItems": 1,
 					"items": {
-						"$ref": "ak-launcher/WwiseApi/Products/Version#/$defs/item"
+						"$ref": "https://satisfactory.dev/ak-launcher/WwiseApi/Products/Version.schema.json#/$defs/item"
 					}
 				}
 			}
