@@ -32,10 +32,7 @@
 		},
 		"macOS": {
 			"type": "object",
-			"required": [
-				"IS_USING_ROOT_LIBRARY",
-				"minimumRequiredVersion"
-			],
+			"required": ["IS_USING_ROOT_LIBRARY", "minimumRequiredVersion"],
 			"additionalProperties": false,
 			"properties": {
 				"IS_USING_ROOT_LIBRARY": {
@@ -64,9 +61,7 @@
 		},
 		"plugins": {
 			"type": "object",
-			"required": [
-				"oldestSupportedWwiseVersion"
-			],
+			"required": ["oldestSupportedWwiseVersion"],
 			"additionalProperties": false,
 			"properties": {
 				"oldestSupportedWwiseVersion": {
@@ -132,9 +127,7 @@
 						},
 						{
 							"type": "object",
-							"required": [
-								"crossoverBottleName"
-							],
+							"required": ["crossoverBottleName"],
 							"additionalProperties": false,
 							"properties": {
 								"crossoverBottleName": {
@@ -191,11 +184,7 @@
 					"minItems": 1,
 					"items": {
 						"type": "object",
-						"required": [
-							"displayName",
-							"id",
-							"url"
-						],
+						"required": ["displayName", "id", "url"],
 						"additionalProperties": false,
 						"properties": {
 							"displayName": {
@@ -240,18 +229,12 @@
 					"minItems": 0,
 					"items": {
 						"type": "object",
-						"required": [
-							"class",
-							"displayName"
-						],
+						"required": ["class", "displayName"],
 						"additionalProperties": false,
 						"properties": {
 							"class": {
 								"type": "string",
-								"enum": [
-									"info",
-									"danger"
-								]
+								"enum": ["info", "danger"]
 							},
 							"displayName": {
 								"type": "string",
@@ -267,11 +250,7 @@
 					"properties": {
 						"minimumRequiredVersion": {
 							"type": "object",
-							"required": [
-								"major",
-								"minor",
-								"year"
-							],
+							"required": ["major", "minor", "year"],
 							"properties": {
 								"major": {
 									"type": "integer",
@@ -297,11 +276,7 @@
 		},
 		"data_groups_item_values_item": {
 			"type": "object",
-			"required": [
-				"displayName",
-				"eulaIds",
-				"id"
-			],
+			"required": ["displayName", "eulaIds", "id"],
 			"properties": {
 				"displayName": {
 					"type": "string",
@@ -323,9 +298,7 @@
 		"data_groups_item_values_item_license": {
 			"type": "object",
 			"$ref": "#/$defs/data_groups_item_values_item",
-			"required": [
-				"license"
-			],
+			"required": ["license"],
 			"properties": {
 				"license": {
 					"type": "object",
@@ -355,24 +328,17 @@
 		},
 		"data_groups_item_values_item_applicable": {
 			"type": "object",
-			"required": [
-				"applicable"
-			],
+			"required": ["applicable"],
 			"properties": {
 				"applicable": {
 					"type": "string",
-					"enum": [
-						"isOSX",
-						"isWindows"
-					]
+					"enum": ["isOSX", "isWindows"]
 				}
 			}
 		},
 		"data_groups_item_values_item_checked": {
 			"type": "object",
-			"required": [
-				"$checked"
-			],
+			"required": ["$checked"],
 			"properties": {
 				"$checked": {
 					"type": "boolean"
@@ -382,9 +348,7 @@
 		"data_groups_item_values_item_visible": {
 			"type": "object",
 			"$ref": "#/$defs/data_groups_item_values_item",
-			"required": [
-				"$visible"
-			],
+			"required": ["$visible"],
 			"properties": {
 				"$visible": {
 					"oneOf": [
@@ -402,9 +366,7 @@
 		"data_groups_item_values_item_description": {
 			"type": "object",
 			"$ref": "#/$defs/data_groups_item_values_item",
-			"required": [
-				"description"
-			],
+			"required": ["description"],
 			"properties": {
 				"description": {
 					"type": "string",
@@ -414,11 +376,7 @@
 		},
 		"data_groups_item": {
 			"type": "object",
-			"required": [
-				"displayName",
-				"id",
-				"values"
-			],
+			"required": ["displayName", "id", "values"],
 			"properties": {
 				"displayName": {
 					"type": "string",
@@ -548,11 +506,7 @@
 					"minItems": 1,
 					"items": {
 						"type": "object",
-						"required": [
-							"displayName",
-							"fileName",
-							"id"
-						],
+						"required": ["displayName", "fileName", "id"],
 						"additionalProperties": false,
 						"properties": {
 							"displayName": {
@@ -575,11 +529,7 @@
 					"minItems": 1,
 					"items": {
 						"type": "object",
-						"required": [
-							"files",
-							"groupId",
-							"id"
-						],
+						"required": ["files", "groupId", "id"],
 						"additionalProperties": false,
 						"properties": {
 							"files": {
@@ -694,10 +644,7 @@
 								"minItems": 0,
 								"items": {
 									"type": "object",
-									"required": [
-										"displayName",
-										"path"
-									],
+									"required": ["displayName", "path"],
 									"additionalProperties": false,
 									"properties": {
 										"displayName": {
@@ -817,9 +764,7 @@
 		"data_item_with_redistributables": {
 			"type": "object",
 			"$ref": "#/$defs/data_item",
-			"required": [
-				"redistributables"
-			],
+			"required": ["redistributables"],
 			"properties": {
 				"redistributables": {
 					"type": "array",
