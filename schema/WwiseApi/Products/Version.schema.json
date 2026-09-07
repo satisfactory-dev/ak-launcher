@@ -28,13 +28,7 @@
 		},
 		"nicknamed_version": {
 			"type": "object",
-			"required": [
-				"build",
-				"major",
-				"minor",
-				"nickname",
-				"year"
-			],
+			"required": ["build", "major", "minor", "nickname", "year"],
 			"additionalProperties": false,
 			"properties": {
 				"build": {
