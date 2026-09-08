@@ -665,7 +665,10 @@
 									"oneOf": [
 										{
 											"type": "object",
-											"required": ["groupId", "groupValueId"],
+											"required": [
+												"groupId",
+												"groupValueId"
+											],
 											"additionalProperties": false,
 											"properties": {
 												"groupId": {
@@ -684,7 +687,10 @@
 										},
 										{
 											"type": "object",
-											"required": ["groupId", "groupValueId"],
+											"required": [
+												"groupId",
+												"groupValueId"
+											],
 											"additionalProperties": false,
 											"properties": {
 												"groupId": {
@@ -693,15 +699,16 @@
 												},
 												"groupValueId": {
 													"type": "string",
-													"enum": [
-														"x64"
-													]
+													"enum": ["x64"]
 												}
 											}
 										},
 										{
 											"type": "object",
-											"required": ["groupId", "groupValueId"],
+											"required": [
+												"groupId",
+												"groupValueId"
+											],
 											"additionalProperties": false,
 											"properties": {
 												"groupId": {
@@ -710,16 +717,16 @@
 												},
 												"groupValueId": {
 													"type": "string",
-													"enum": [
-														"Windows",
-														"OSX"
-													]
+													"enum": ["Windows", "OSX"]
 												}
 											}
 										},
 										{
 											"type": "object",
-											"required": ["groupId", "groupValueId"],
+											"required": [
+												"groupId",
+												"groupValueId"
+											],
 											"additionalProperties": false,
 											"properties": {
 												"groupId": {

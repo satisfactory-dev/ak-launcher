@@ -184,8 +184,8 @@ type VersionFileGroup = (
 	| {
 		groupId: 'Packages',
 		groupValueId: (
-		| 'Authoring'
-		| 'Documentation'
+			| 'Authoring'
+			| 'Documentation'
 			| 'SDK'
 		),
 	}
@@ -198,22 +198,22 @@ type VersionFileGroup = (
 	| {
 		groupId: 'AuthoringOS',
 		groupValueId: (
-		| 'Windows'
+			| 'Windows'
 			| 'OSX'
 		),
 	}
 	| {
 		groupId: 'DeploymentPlatforms',
 		groupValueId: (
-		| 'WinGC'
+			| 'WinGC'
 			| 'Windows_vc160'
 			| 'Windows_vc170'
-		| 'Linux'
-		| 'Android'
-		| 'iOS'
-		| 'tvOS'
-		| 'visionOS'
-		| 'Mac'
+			| 'Linux'
+			| 'Android'
+			| 'iOS'
+			| 'tvOS'
+			| 'visionOS'
+			| 'Mac'
 		),
 	}
 );
