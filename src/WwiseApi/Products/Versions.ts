@@ -1,3 +1,5 @@
+import type {} from '@signpostmarv/js-types';
+
 import type {
 	SuccessfulResponse,
 } from '../AbstractApi.ts';
@@ -407,6 +409,113 @@ export type by_category_response = SuccessfulResponse<{
 }>;
 
 export type bundle_by_id_response = SuccessfulResponse<Version>;
+
+type bundle_by_id_response_filter_groups = Partial<{
+	[VFG in VersionFileGroup as VFG['groupId']]: [
+		VFG['groupValueId'],
+		...VFG['groupValueId'][],
+	]
+}>;
+
+export type bundle_by_id_response_filter = {
+	files?: {
+		groups?: [
+			bundle_by_id_response_filter_groups,
+			...bundle_by_id_response_filter_groups[]
+		],
+	},
+};
+
+export function filter_bundle_by_id_response(
+	response: bundle_by_id_response,
+	{
+		include = {},
+		include_documentation = true,
+		exclude_id_prefixes = [],
+	}: {
+		include?: bundle_by_id_response_filter,
+		include_documentation?: boolean,
+		exclude_id_prefixes?: string[],
+	},
+): (
+	& Omit<bundle_by_id_response, 'data'>
+	& {
+		data: (
+			& Omit<bundle_by_id_response['data'], 'files'>
+			& {
+				files: bundle_by_id_response['data']['files'][number][],
+			}
+		),
+	}
+) {
+	const {
+		files: _files,
+		...unfiltered
+	} = response.data;
+
+	let files: bundle_by_id_response['data']['files'][number][] = _files;
+
+	const files_groups_filter = (
+		include.files?.groups || []
+	).map((filter) => Object.entries(
+		filter,
+	));
+
+	if (files_groups_filter.length > 0) {
+		files = files.filter((maybe) => {
+			if (
+				(
+					exclude_id_prefixes.length > 0
+					&& exclude_id_prefixes.some((
+						prefix,
+					) => maybe.id.startsWith(prefix))
+				)
+				|| (
+					!include_documentation
+					&& /^[^.]+\.Documentation\./.test(maybe.id)
+				)
+			) {
+				return false;
+			}
+
+			return files_groups_filter.some((match_all_of_these) => {
+				const filter_groupId_list = new Set(match_all_of_these.map(([
+					groupId,
+				]) => groupId));
+
+				return match_all_of_these.every(([
+					groupId,
+					groupValueId_list,
+				]) => {
+					const maybe_groupId_list = new Set(maybe.groups.map(({
+						groupId,
+					}) => groupId));
+
+					if (filter_groupId_list.symmetricDifference(
+						maybe_groupId_list,
+					).size > 0) {
+						return false;
+					}
+
+					return maybe.groups.some((group) => (
+						group.groupId === groupId
+						&& (
+							groupValueId_list as string[]
+						).includes(group.groupValueId)
+					));
+				});
+			});
+		});
+	}
+
+	return {
+		statusCode: 200,
+		data: {
+			...unfiltered,
+			files,
+		},
+	};
+}
 
 export default class Versions extends AbstractApi {
 	bundles_by_category(

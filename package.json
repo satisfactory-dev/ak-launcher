@@ -25,5 +25,8 @@
     "oxlint-tsgolint": "^7.0.2001",
     "prettier": "^3.9.6",
     "typescript": "~7.0.2"
+  },
+  "peerDependencies": {
+    "@signpostmarv/js-types": "^0.5.1"
   }
 }
