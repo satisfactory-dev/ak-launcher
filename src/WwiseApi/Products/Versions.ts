@@ -218,7 +218,7 @@ type VersionFile = {
 	],
 	groups: [
 		VersionFileGroup,
-		VersionFileGroup[],
+		...VersionFileGroup[],
 	],
 	id: filename_compressed,
 	licenses: Array<never>,
