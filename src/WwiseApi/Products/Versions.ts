@@ -421,7 +421,7 @@ export type bundle_by_id_response_filter = {
 	files?: {
 		groups?: [
 			bundle_by_id_response_filter_groups,
-			...bundle_by_id_response_filter_groups[]
+			...bundle_by_id_response_filter_groups[],
 		],
 	},
 };
