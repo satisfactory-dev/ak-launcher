@@ -178,30 +178,43 @@ type VersionFileDocumentation = {
 	path: `${Exclude<string, ''>}.${'chm' | 'pdf'}`,
 };
 
-type VersionFileGroup = {
-	groupId: (
-		| 'Packages'
-		| 'AuthoringPlatforms'
-		| 'AuthoringOS'
-		| 'DeploymentPlatforms'
-	),
-	groupValueId: (
+type VersionFileGroup = (
+	| {
+		groupId: 'Packages',
+		groupValueId: (
 		| 'Authoring'
 		| 'Documentation'
+			| 'SDK'
+		),
+	}
+	| {
+		groupId: 'AuthoringPlatforms',
+		groupValueId: (
 		| 'x64'
+		),
+	}
+	| {
+		groupId: 'AuthoringOS',
+		groupValueId: (
 		| 'Windows'
-		| 'SDK'
+			| 'OSX'
+		),
+	}
+	| {
+		groupId: 'DeploymentPlatforms',
+		groupValueId: (
 		| 'WinGC'
+			| 'Windows_vc160'
+			| 'Windows_vc170'
 		| 'Linux'
 		| 'Android'
 		| 'iOS'
 		| 'tvOS'
 		| 'visionOS'
 		| 'Mac'
-		| 'OSX'
-		| `Windows_vc${number}`
-	),
-};
+		),
+	}
+);
 
 type filename_xz = `${Exclude<string, ''>}.tar.xz`;
 type filename_zip = `${Exclude<string, ''>}.zip`;

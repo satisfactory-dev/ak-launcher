@@ -661,44 +661,88 @@
 								"items": {
 									"type": "object",
 									"required": ["groupId", "groupValueId"],
-									"additionalProperties": false,
-									"properties": {
-										"groupId": {
-											"type": "string",
-											"enum": [
-												"Packages",
-												"AuthoringPlatforms",
-												"AuthoringOS",
-												"DeploymentPlatforms"
-											]
-										},
-										"groupValueId": {
-											"oneOf": [
-												{
+									"unevaluatedProperties": false,
+									"oneOf": [
+										{
+											"type": "object",
+											"required": ["groupId", "groupValueId"],
+											"additionalProperties": false,
+											"properties": {
+												"groupId": {
+													"type": "string",
+													"const": "Packages"
+												},
+												"groupValueId": {
 													"type": "string",
 													"enum": [
 														"Authoring",
 														"Documentation",
-														"x64",
+														"SDK"
+													]
+												}
+											}
+										},
+										{
+											"type": "object",
+											"required": ["groupId", "groupValueId"],
+											"additionalProperties": false,
+											"properties": {
+												"groupId": {
+													"type": "string",
+													"const": "AuthoringPlatforms"
+												},
+												"groupValueId": {
+													"type": "string",
+													"enum": [
+														"x64"
+													]
+												}
+											}
+										},
+										{
+											"type": "object",
+											"required": ["groupId", "groupValueId"],
+											"additionalProperties": false,
+											"properties": {
+												"groupId": {
+													"type": "string",
+													"const": "AuthoringOS"
+												},
+												"groupValueId": {
+													"type": "string",
+													"enum": [
 														"Windows",
-														"SDK",
+														"OSX"
+													]
+												}
+											}
+										},
+										{
+											"type": "object",
+											"required": ["groupId", "groupValueId"],
+											"additionalProperties": false,
+											"properties": {
+												"groupId": {
+													"type": "string",
+													"const": "DeploymentPlatforms"
+												},
+												"groupValueId": {
+													"type": "string",
+													"enum": [
 														"WinGC",
+														"Windows_vc160",
+														"Windows_vc170",
 														"Linux",
 														"Android",
 														"iOS",
 														"tvOS",
 														"visionOS",
-														"Mac",
-														"OSX"
+														"Mac"
 													]
-												},
-												{
-													"type": "string",
-													"pattern": "^Windows_vc\\d+$"
 												}
-											]
+											}
 										}
-									}
+									]
 								}
 							},
 							"id": {
