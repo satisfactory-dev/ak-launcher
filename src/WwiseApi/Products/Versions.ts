@@ -5,6 +5,7 @@ import type {
 } from '../AbstractApi.ts';
 import AbstractApi from '../AbstractApi.ts';
 
+// oxlint-disable-next-line @stylistic/max-len
 import type VersionSchema from '../../../schema/WwiseApi/Products/Version.schema.ts';
 
 type BundleType = (
@@ -183,42 +184,42 @@ type VersionFileDocumentation = {
 };
 
 type VersionFileGroup_Packages = {
-		groupId: 'Packages',
-		groupValueId: (
-			| 'Authoring'
-			| 'Documentation'
-			| 'SDK'
-		),
+	groupId: 'Packages',
+	groupValueId: (
+		| 'Authoring'
+		| 'Documentation'
+		| 'SDK'
+	),
 };
 
 type VersionFileGroup_AuthoringPlatforms = {
-		groupId: 'AuthoringPlatforms',
-		groupValueId: (
+	groupId: 'AuthoringPlatforms',
+	groupValueId: (
 		| 'x64'
-		),
+	),
 };
 
 type VersionFileGroup_AuthoringOS = {
-		groupId: 'AuthoringOS',
-		groupValueId: (
-			| 'Windows'
-			| 'OSX'
-		),
+	groupId: 'AuthoringOS',
+	groupValueId: (
+		| 'Windows'
+		| 'OSX'
+	),
 };
 
 type VersionFileGroup_DeploymentPlatforms = {
-		groupId: 'DeploymentPlatforms',
-		groupValueId: (
-			| 'WinGC'
-			| 'Windows_vc160'
-			| 'Windows_vc170'
-			| 'Linux'
-			| 'Android'
-			| 'iOS'
-			| 'tvOS'
-			| 'visionOS'
-			| 'Mac'
-		),
+	groupId: 'DeploymentPlatforms',
+	groupValueId: (
+		| 'WinGC'
+		| 'Windows_vc160'
+		| 'Windows_vc170'
+		| 'Linux'
+		| 'Android'
+		| 'iOS'
+		| 'tvOS'
+		| 'visionOS'
+		| 'Mac'
+	),
 };
 
 type VersionFileGroup = (
