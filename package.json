@@ -18,6 +18,9 @@
   "funding": "https://github.com/satisfactory-dev/ak-launcher?sponsor=1",
   "exports": "./index.js",
   "types": "./index.d.ts",
+  "scripts": {
+    "prepare": "node ./generate-const-types.ts"
+  },
   "devDependencies": {
     "@signpostmarv/oxlint-config": "^0.5.0",
     "@types/node": "^26.1.2",

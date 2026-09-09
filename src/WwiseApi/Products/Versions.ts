@@ -5,6 +5,8 @@ import type {
 } from '../AbstractApi.ts';
 import AbstractApi from '../AbstractApi.ts';
 
+import type VersionSchema from '../../../schema/WwiseApi/Products/Version.schema.ts';
+
 type BundleType = (
 	| 'wwise'
 	| 'plugin'
@@ -218,13 +220,41 @@ type VersionFileGroup = (
 	}
 );
 
-type filename_xz = `${Exclude<string, ''>}.tar.xz`;
-type filename_zip = `${Exclude<string, ''>}.zip`;
+declare const StringPassesRegexKey: unique symbol;
+
+type StringPassesRegex<
+	Source extends string,
+	Guide extends string,
+> = (
+	& Guide
+	& {
+		[StringPassesRegexKey]: Source,
+	}
+);
+
+export type filename_xz = StringPassesRegex<
+	typeof VersionSchema.$defs.filename_xz.pattern,
+	`${Exclude<string, ''>}.tar.xz`
+>;
+export type filename_zip = StringPassesRegex<
+	typeof VersionSchema.$defs.filename_zip.pattern,
+	`${Exclude<string, ''>}.zip`
+>;
 type filename_compressed = (
 	| filename_xz
 	| filename_zip
 );
-type filename_exe = `${Exclude<string, ''>}.exe`;
+
+export type filename_exe = StringPassesRegex<
+	typeof VersionSchema.$defs.filename_exe.pattern,
+	`${Exclude<string, ''>}.exe`
+>;
+
+export type PatternMatchedFilename = (
+	| filename_xz
+	| filename_zip
+	| filename_exe
+);
 
 type VersionFile = {
 	documentationFiles: [
