@@ -182,29 +182,31 @@ type VersionFileDocumentation = {
 	path: `${Exclude<string, ''>}.${'chm' | 'pdf'}`,
 };
 
-type VersionFileGroup = (
-	| {
+type VersionFileGroup_Packages = {
 		groupId: 'Packages',
 		groupValueId: (
 			| 'Authoring'
 			| 'Documentation'
 			| 'SDK'
 		),
-	}
-	| {
+};
+
+type VersionFileGroup_AuthoringPlatforms = {
 		groupId: 'AuthoringPlatforms',
 		groupValueId: (
 		| 'x64'
 		),
-	}
-	| {
+};
+
+type VersionFileGroup_AuthoringOS = {
 		groupId: 'AuthoringOS',
 		groupValueId: (
 			| 'Windows'
 			| 'OSX'
 		),
-	}
-	| {
+};
+
+type VersionFileGroup_DeploymentPlatforms = {
 		groupId: 'DeploymentPlatforms',
 		groupValueId: (
 			| 'WinGC'
@@ -217,7 +219,13 @@ type VersionFileGroup = (
 			| 'visionOS'
 			| 'Mac'
 		),
-	}
+};
+
+type VersionFileGroup = (
+	| VersionFileGroup_Packages
+	| VersionFileGroup_AuthoringPlatforms
+	| VersionFileGroup_AuthoringOS
+	| VersionFileGroup_DeploymentPlatforms
 );
 
 declare const StringPassesRegexKey: unique symbol;
@@ -462,17 +470,33 @@ export function filter_bundle_by_id_response(
 		include = {},
 		include_documentation = true,
 		exclude_id_prefixes = [],
+		keep_executable_config = {
+			Release: true,
+			Debug: false,
+		},
 	}: {
 		include?: bundle_by_id_response_filter,
 		include_documentation?: boolean,
 		exclude_id_prefixes?: string[],
+		keep_executable_config?: {
+			[key in VersionExecutableFile['config']]: boolean
+		},
 	},
 ): (
 	& Omit<bundle_by_id_response, 'data'>
 	& {
 		data: (
-			& Omit<bundle_by_id_response['data'], 'files'>
+			& Omit<bundle_by_id_response['data'], (
+				| 'executables'
+				| 'files'
+			)>
 			& {
+				executables: (
+					& Omit<VersionExecutable, 'files'>
+					& {
+						files: VersionExecutableFile[],
+					}
+				)[],
 				files: bundle_by_id_response['data']['files'][number][],
 			}
 		),
@@ -480,6 +504,7 @@ export function filter_bundle_by_id_response(
 ) {
 	const {
 		files: _files,
+		executables: _executables,
 		...unfiltered
 	} = response.data;
 
@@ -538,10 +563,73 @@ export function filter_bundle_by_id_response(
 		});
 	}
 
+	const executable_group_ids = new Set(files.map((
+		e,
+	) => e.sourceName.replace(/^.+\.([^.]+)\.(?:tar.xz|zip|exe)$/, '$1')));
+
+	// oxlint-disable-next-line @stylistic/max-len
+	// @todo update @signpostmarv/js-types to more accurately describe Array.prototype.flatMap()
+	const files_groups_filter_flattened = files_groups_filter.flatMap((
+		e,
+	) => e) as [
+		VersionFileGroup['groupId'],
+		VersionFileGroup['groupValueId'][],
+	][];
+
+	const executable_os_filter = new Set(files_groups_filter_flattened.filter((
+		maybe,
+	): maybe is [
+		VersionFileGroup_AuthoringOS['groupId'],
+		VersionFileGroup_AuthoringOS['groupValueId'][],
+	] => maybe[0] === 'AuthoringOS').flatMap(([, e]) => e).map((e) => {
+		if ('OSX' === e) {
+			return 'Mac';
+		}
+
+		return e;
+	}));
+
+	const executable_platform_filter = new Set(
+		files_groups_filter_flattened.filter((
+			maybe,
+		): maybe is [
+			VersionFileGroup_AuthoringPlatforms['groupId'],
+			VersionFileGroup_AuthoringPlatforms['groupValueId'][],
+		] => maybe[0] === 'AuthoringPlatforms').flatMap((
+			[, e],
+		) => e).map((e): (typeof e extends 'x64' ? 'amd64' : typeof e) => {
+			if ('x64' === e) {
+				return 'amd64';
+			}
+
+			return e;
+		}),
+	);
+
+	const executable_file_filter = (file: VersionExecutableFile) => (
+		keep_executable_config[file.config]
+		&& executable_platform_filter.has(file.architecture)
+		&& executable_os_filter.has(file.os)
+	);
+
+	const executables = _executables.filter((maybe) => {
+		return (
+			executable_group_ids.has(maybe.groupId)
+			|| maybe.files.some(executable_file_filter)
+		);
+	}).map(({
+		files,
+		...remaining
+	}) => ({
+		...remaining,
+		files: files.filter(executable_file_filter),
+	}));
+
 	return {
 		statusCode: 200,
 		data: {
 			...unfiltered,
+			executables,
 			files,
 		},
 	};
