@@ -488,10 +488,12 @@ export function filter_bundle_by_id_response(
 	& {
 		data: (
 			& Omit<bundle_by_id_response['data'], (
+				| 'eulas'
 				| 'executables'
 				| 'files'
 			)>
 			& {
+				eulas: bundle_by_id_response['data']['eulas'][number][],
 				executables: (
 					& Omit<VersionExecutable, 'files'>
 					& {
@@ -504,6 +506,7 @@ export function filter_bundle_by_id_response(
 	}
 ) {
 	const {
+		eulas,
 		files: _files,
 		executables: _executables,
 		...unfiltered
@@ -626,10 +629,24 @@ export function filter_bundle_by_id_response(
 		files: files.filter(executable_file_filter),
 	}));
 
+	const file_groups = files.flatMap(({groups}) => groups);
+
+	const eulaIds = new Set(unfiltered.groups
+		.filter(({id: groupId, values}) => {
+			const groupValueId_list = new Set(values.map(({id}) => id));
+
+			return file_groups.some((maybe) => (
+				maybe.groupId === groupId
+				&& groupValueId_list.has(maybe.groupValueId)
+			));
+		})
+		.flatMap(({values}) => values.flatMap(({eulaIds}) => eulaIds)));
+
 	return {
 		statusCode: 200,
 		data: {
 			...unfiltered,
+			eulas: eulas.filter((maybe) => eulaIds.has(maybe.id)),
 			executables,
 			files,
 		},
