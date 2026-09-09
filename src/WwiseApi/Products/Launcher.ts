@@ -1,3 +1,5 @@
+import type integer from '../../integer.ts';
+
 import type {
 	SuccessfulResponse,
 } from '../AbstractApi.ts';
@@ -8,10 +10,10 @@ import type {
 } from './Versions.ts';
 
 type filesUrl<
-	year extends number,
-	major extends number,
-	minor extends number,
-	build extends number,
+	year extends integer,
+	major extends integer,
+	minor extends integer,
+	build extends integer,
 	format extends 'exe'|'pkg',
 > = {
 	name: `AudiokineticLauncher-${year}.${major}.${minor}.${build}.${format}`,
@@ -45,10 +47,10 @@ type filesUrl<
 };
 
 export type latest_launcher<
-	year extends number = number,
-	major extends number = number,
-	minor extends number = number,
-	build extends number = number,
+	year extends integer = integer,
+	major extends integer = integer,
+	minor extends integer = integer,
+	build extends integer = integer,
 > = SuccessfulResponse<{
 	filesUrl: [
 		filesUrl<year, major, minor, build, 'pkg'>,
