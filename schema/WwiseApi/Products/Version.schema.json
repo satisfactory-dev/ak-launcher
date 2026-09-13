@@ -494,10 +494,7 @@
 		"data_item_file": {
 			"type": "object",
 			"$ref": "#/$defs/data_item_file--base",
-			"required": [
-				"documentationFiles",
-				"groups"
-			],
+			"required": ["documentationFiles", "groups"],
 			"properties": {
 				"documentationFiles": {
 					"type": "array",
@@ -528,10 +525,7 @@
 						"oneOf": [
 							{
 								"type": "object",
-								"required": [
-									"groupId",
-									"groupValueId"
-								],
+								"required": ["groupId", "groupValueId"],
 								"additionalProperties": false,
 								"properties": {
 									"groupId": {
@@ -550,10 +544,7 @@
 							},
 							{
 								"type": "object",
-								"required": [
-									"groupId",
-									"groupValueId"
-								],
+								"required": ["groupId", "groupValueId"],
 								"additionalProperties": false,
 								"properties": {
 									"groupId": {
@@ -568,10 +559,7 @@
 							},
 							{
 								"type": "object",
-								"required": [
-									"groupId",
-									"groupValueId"
-								],
+								"required": ["groupId", "groupValueId"],
 								"additionalProperties": false,
 								"properties": {
 									"groupId": {
@@ -586,10 +574,7 @@
 							},
 							{
 								"type": "object",
-								"required": [
-									"groupId",
-									"groupValueId"
-								],
+								"required": ["groupId", "groupValueId"],
 								"additionalProperties": false,
 								"properties": {
 									"groupId": {
