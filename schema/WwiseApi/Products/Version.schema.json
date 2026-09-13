@@ -492,128 +492,128 @@
 			}
 		},
 		"data_item_file": {
-						"type": "object",
+			"type": "object",
 			"$ref": "#/$defs/data_item_file--base",
-						"required": [
-							"documentationFiles",
+			"required": [
+				"documentationFiles",
 				"groups"
-						],
+			],
+			"properties": {
+				"documentationFiles": {
+					"type": "array",
+					"minItems": 0,
+					"items": {
+						"type": "object",
+						"required": ["displayName", "path"],
+						"additionalProperties": false,
 						"properties": {
-							"documentationFiles": {
-								"type": "array",
-								"minItems": 0,
-								"items": {
-									"type": "object",
-									"required": ["displayName", "path"],
-									"additionalProperties": false,
-									"properties": {
-										"displayName": {
-											"type": "string",
-											"minLength": 1
-										},
-										"path": {
-											"type": "string",
-											"pattern": "^(\\\\[A-Za-z0-9][A-Za-z0-9_-]*)+\\.(chm|pdf)$"
-										}
+							"displayName": {
+								"type": "string",
+								"minLength": 1
+							},
+							"path": {
+								"type": "string",
+								"pattern": "^(\\\\[A-Za-z0-9][A-Za-z0-9_-]*)+\\.(chm|pdf)$"
+							}
+						}
+					}
+				},
+				"groups": {
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"type": "object",
+						"required": ["groupId", "groupValueId"],
+						"unevaluatedProperties": false,
+						"oneOf": [
+							{
+								"type": "object",
+								"required": [
+									"groupId",
+									"groupValueId"
+								],
+								"additionalProperties": false,
+								"properties": {
+									"groupId": {
+										"type": "string",
+										"const": "Packages"
+									},
+									"groupValueId": {
+										"type": "string",
+										"enum": [
+											"Authoring",
+											"Documentation",
+											"SDK"
+										]
 									}
 								}
 							},
-							"groups": {
-								"type": "array",
-								"minItems": 1,
-								"items": {
-									"type": "object",
-									"required": ["groupId", "groupValueId"],
-									"unevaluatedProperties": false,
-									"oneOf": [
-										{
-											"type": "object",
-											"required": [
-												"groupId",
-												"groupValueId"
-											],
-											"additionalProperties": false,
-											"properties": {
-												"groupId": {
-													"type": "string",
-													"const": "Packages"
-												},
-												"groupValueId": {
-													"type": "string",
-													"enum": [
-														"Authoring",
-														"Documentation",
-														"SDK"
-													]
-												}
-											}
-										},
-										{
-											"type": "object",
-											"required": [
-												"groupId",
-												"groupValueId"
-											],
-											"additionalProperties": false,
-											"properties": {
-												"groupId": {
-													"type": "string",
-													"const": "AuthoringPlatforms"
-												},
-												"groupValueId": {
-													"type": "string",
-													"enum": ["x64"]
-												}
-											}
-										},
-										{
-											"type": "object",
-											"required": [
-												"groupId",
-												"groupValueId"
-											],
-											"additionalProperties": false,
-											"properties": {
-												"groupId": {
-													"type": "string",
-													"const": "AuthoringOS"
-												},
-												"groupValueId": {
-													"type": "string",
-													"enum": ["Windows", "OSX"]
-												}
-											}
-										},
-										{
-											"type": "object",
-											"required": [
-												"groupId",
-												"groupValueId"
-											],
-											"additionalProperties": false,
-											"properties": {
-												"groupId": {
-													"type": "string",
-													"const": "DeploymentPlatforms"
-												},
-												"groupValueId": {
-													"type": "string",
-													"enum": [
-														"WinGC",
-														"Windows_vc160",
-														"Windows_vc170",
-														"Linux",
-														"Android",
-														"iOS",
-														"tvOS",
-														"visionOS",
-														"Mac"
-													]
-												}
-											}
-										}
-									]
+							{
+								"type": "object",
+								"required": [
+									"groupId",
+									"groupValueId"
+								],
+								"additionalProperties": false,
+								"properties": {
+									"groupId": {
+										"type": "string",
+										"const": "AuthoringPlatforms"
+									},
+									"groupValueId": {
+										"type": "string",
+										"enum": ["x64"]
+									}
 								}
+							},
+							{
+								"type": "object",
+								"required": [
+									"groupId",
+									"groupValueId"
+								],
+								"additionalProperties": false,
+								"properties": {
+									"groupId": {
+										"type": "string",
+										"const": "AuthoringOS"
+									},
+									"groupValueId": {
+										"type": "string",
+										"enum": ["Windows", "OSX"]
+									}
+								}
+							},
+							{
+								"type": "object",
+								"required": [
+									"groupId",
+									"groupValueId"
+								],
+								"additionalProperties": false,
+								"properties": {
+									"groupId": {
+										"type": "string",
+										"const": "DeploymentPlatforms"
+									},
+									"groupValueId": {
+										"type": "string",
+										"enum": [
+											"WinGC",
+											"Windows_vc160",
+											"Windows_vc170",
+											"Linux",
+											"Android",
+											"iOS",
+											"tvOS",
+											"visionOS",
+											"Mac"
+										]
+									}
+								}
+							}
+						]
+					}
 				}
 			}
 		},
@@ -628,41 +628,41 @@
 						"uncompressedSize"
 					],
 					"properties": {
-							"licenses": {
-								"type": "array",
-								"minItems": 0,
-								"maxItems": 0
-							},
-							"sha1": {
-								"type": "string",
-								"pattern": "^[a-f0-9]{40}$"
-							},
-							"size": {
-								"oneOf": [
-									{
-								"type": "integer",
-								"$comment": "since we're not using ajv-specific keywords, take care to verify uncompressedSize is equal to or greater than size",
-								"minimum": 0
-									},
-									{
-										"type": "string",
-										"pattern": "^\\d+$"
-									}
-								]
-							},
-							"uncompressedSize": {
-								"oneOf": [
-									{
-								"type": "integer",
-								"$comment": "since we're not using ajv-specific keywords, take care to verify uncompressedSize is equal to or greater than size",
-								"minimum": 0
-									},
-									{
-										"type": "string",
-										"pattern": "^\\d+$"
-									}
-								]
-							}
+						"licenses": {
+							"type": "array",
+							"minItems": 0,
+							"maxItems": 0
+						},
+						"sha1": {
+							"type": "string",
+							"pattern": "^[a-f0-9]{40}$"
+						},
+						"size": {
+							"oneOf": [
+								{
+									"type": "integer",
+									"$comment": "since we're not using ajv-specific keywords, take care to verify uncompressedSize is equal to or greater than size",
+									"minimum": 0
+								},
+								{
+									"type": "string",
+									"pattern": "^\\d+$"
+								}
+							]
+						},
+						"uncompressedSize": {
+							"oneOf": [
+								{
+									"type": "integer",
+									"$comment": "since we're not using ajv-specific keywords, take care to verify uncompressedSize is equal to or greater than size",
+									"minimum": 0
+								},
+								{
+									"type": "string",
+									"pattern": "^\\d+$"
+								}
+							]
+						}
 					}
 				},
 				{
