@@ -90,7 +90,7 @@ type VersionCommonBase = {
 	),
 	vendor: Exclude<string, ''>,
 	version: nicknamed_version<Exclude<string, ''>>,
-	links: [Link, ...Link[]],
+	links: Link[],
 	$checked: null,
 	$unlocked: null,
 	$visible: null,
@@ -139,8 +139,8 @@ type Bundle = (
 	)
 );
 
-type VersionEula = {
-	display: Exclude<string, ''>,
+export type VersionEula = {
+	displayName: Exclude<string, ''>,
 	fileName: `${Exclude<string, ''>}.txt`,
 	id: Exclude<string, ''>,
 };
@@ -257,6 +257,11 @@ type filename_compressed = (
 export type filename_exe = StringPassesRegex<
 	typeof VersionSchema.$defs.filename_exe.pattern,
 	`${Exclude<string, ''>}.exe`
+>;
+
+export type filename_pkg = StringPassesRegex<
+	typeof VersionSchema.$defs.filename_pkg.pattern,
+	`${Exclude<string, ''>}.pkg`
 >;
 
 export type PatternMatchedFilename = (
@@ -447,7 +452,13 @@ export type by_category_response = SuccessfulResponse<{
 	bundles: [Bundle, ...Bundle[]],
 }>;
 
-export type bundle_by_id_response = SuccessfulResponse<Version>;
+export type bundle_by_id_response = SuccessfulResponse<(
+	| Version
+	| Omit<Version, (
+		| 'links'
+		| 'productDependentData'
+	)>
+)>;
 
 type bundle_by_id_response_filter_groups = Partial<{
 	[VFG in VersionFileGroup as VFG['groupId']]: [
@@ -465,6 +476,20 @@ export type bundle_by_id_response_filter = {
 	},
 };
 
+export type filter_bundle_by_id_response_filter = {
+	include?: bundle_by_id_response_filter,
+	include_documentation?: boolean,
+	exclude_id_prefixes?: string[],
+	keep_executable_config?: {
+		[key in VersionExecutableFile['config']]: boolean
+	},
+};
+
+export type file_response = SuccessfulResponse<{
+	id: Exclude<string, ''>,
+	url: `https://${Exclude<string, ''>}`,
+}>;
+
 export function filter_bundle_by_id_response(
 	response: bundle_by_id_response,
 	{
@@ -475,14 +500,7 @@ export function filter_bundle_by_id_response(
 			Release: true,
 			Debug: false,
 		},
-	}: {
-		include?: bundle_by_id_response_filter,
-		include_documentation?: boolean,
-		exclude_id_prefixes?: string[],
-		keep_executable_config?: {
-			[key in VersionExecutableFile['config']]: boolean
-		},
-	},
+	}: filter_bundle_by_id_response_filter,
 ): (
 	& Omit<bundle_by_id_response, 'data'>
 	& {
@@ -656,7 +674,10 @@ export function filter_bundle_by_id_response(
 export default class Versions extends AbstractApi {
 	bundles_by_category(
 		jwt: string,
-		category: BundleType & 'wwise',
+		category: BundleType & (
+			| 'wwise'
+			| 'Launcher'
+		),
 		validate_verified_payload: (
 			maybe: unknown,
 		) => maybe is by_category_response,
@@ -684,5 +705,26 @@ export default class Versions extends AbstractApi {
 			}`,
 			validate_verified_payload,
 		);
+	}
+
+	async file(
+		jwt: string,
+		id: string,
+		filename: (
+			| VersionFile['id']
+		),
+		validate_verified_payload: (
+			maybe: unknown,
+		) => maybe is file_response,
+	) {
+		return this.api_call(
+			jwt,
+			`https://blob-api.gowwise.com/products/versions/${
+				encodeURIComponent(id)
+			}/file?filename=${
+				encodeURIComponent(filename)
+			}`,
+			validate_verified_payload,
+		).then(({data: {url}}) => fetch(url));
 	}
 }

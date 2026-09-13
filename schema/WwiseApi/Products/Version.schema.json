@@ -4,6 +4,10 @@
 	"required": ["statusCode", "data"],
 	"additionalProperties": false,
 	"$defs": {
+		"filename_pkg": {
+			"type": "string",
+			"pattern": "^([A-Za-z0-9][A-Za-z0-9_.-]*\\.)pkg$"
+		},
 		"filename_xz": {
 			"type": "string",
 			"pattern": "^([A-Za-z0-9][A-Za-z0-9_-]*\\.)+tar\\.xz$"
@@ -12,19 +16,9 @@
 			"type": "string",
 			"pattern": "^([A-Za-z0-9][A-Za-z0-9_-]*\\.)+zip$"
 		},
-		"filename_compressed": {
-			"oneOf": [
-				{
-					"$ref": "#/$defs/filename_xz"
-				},
-				{
-					"$ref": "#/$defs/filename_zip"
-				}
-			]
-		},
 		"filename_exe": {
 			"type": "string",
-			"pattern": "^([A-Za-z0-9][A-Za-z0-9_-]*\\.)+exe$"
+			"pattern": "^([A-Za-z0-9][A-Za-z0-9_.-]*\\.)+exe$"
 		},
 		"nicknamed_version": {
 			"type": "object",
@@ -107,17 +101,15 @@
 				}
 			}
 		},
-		"item": {
+		"item--base": {
 			"type": "object",
 			"required": [
 				"id",
 				"tag",
 				"type",
 				"name",
-				"productDependentData",
 				"vendor",
 				"version",
-				"links",
 				"$checked",
 				"$unlocked",
 				"$visible",
@@ -125,7 +117,6 @@
 				"$message",
 				"$sortGroupIndex",
 				"applicable",
-				"labels",
 				"initialPublishDate"
 			],
 			"properties": {
@@ -145,59 +136,12 @@
 					"type": "string",
 					"minLength": 1
 				},
-				"productDependentData": {
-					"oneOf": [
-						{
-							"type": "object",
-							"maxProperties": 0
-						},
-						{
-							"type": "object",
-							"required": ["crossoverBottleName"],
-							"additionalProperties": false,
-							"properties": {
-								"crossoverBottleName": {
-									"$ref": "#/$defs/crossoverBottleName"
-								},
-								"macOS": {
-									"$ref": "#/$defs/macOS"
-								},
-								"plugins": {
-									"$ref": "#/$defs/plugins"
-								}
-							}
-						}
-					]
-				},
 				"vendor": {
 					"type": "string",
 					"minLength": 1
 				},
 				"version": {
 					"$ref": "#/$defs/nicknamed_version"
-				},
-				"links": {
-					"type": "array",
-					"minItems": 1,
-					"items": {
-						"type": "object",
-						"required": ["displayName", "id", "url"],
-						"additionalProperties": false,
-						"properties": {
-							"displayName": {
-								"type": "string",
-								"minLength": 1
-							},
-							"id": {
-								"type": "string",
-								"minLength": 1
-							},
-							"url": {
-								"type": "string",
-								"minLength": 1
-							}
-						}
-					}
 				},
 				"$checked": {
 					"type": "null"
@@ -220,25 +164,6 @@
 				},
 				"applicable": {
 					"type": "null"
-				},
-				"labels": {
-					"type": "array",
-					"minItems": 0,
-					"items": {
-						"type": "object",
-						"required": ["class", "displayName"],
-						"additionalProperties": false,
-						"properties": {
-							"class": {
-								"type": "string",
-								"enum": ["info", "danger"]
-							},
-							"displayName": {
-								"type": "string",
-								"minLength": 1
-							}
-						}
-					}
 				},
 				"launcher": {
 					"type": "object",
@@ -268,6 +193,79 @@
 				"initialPublishDate": {
 					"type": "integer",
 					"$comment": "UNIX epoch in milliseconds"
+				}
+			}
+		},
+		"item": {
+			"type": "object",
+			"$ref": "#/$defs/item--base",
+			"required": ["productDependentData", "links", "labels"],
+			"properties": {
+				"productDependentData": {
+					"oneOf": [
+						{
+							"type": "object",
+							"maxProperties": 0
+						},
+						{
+							"type": "object",
+							"required": ["crossoverBottleName"],
+							"additionalProperties": false,
+							"properties": {
+								"crossoverBottleName": {
+									"$ref": "#/$defs/crossoverBottleName"
+								},
+								"macOS": {
+									"$ref": "#/$defs/macOS"
+								},
+								"plugins": {
+									"$ref": "#/$defs/plugins"
+								}
+							}
+						}
+					]
+				},
+				"links": {
+					"type": "array",
+					"minItems": 0,
+					"items": {
+						"type": "object",
+						"required": ["displayName", "id", "url"],
+						"additionalProperties": false,
+						"properties": {
+							"displayName": {
+								"type": "string",
+								"minLength": 1
+							},
+							"id": {
+								"type": "string",
+								"minLength": 1
+							},
+							"url": {
+								"type": "string",
+								"minLength": 1
+							}
+						}
+					}
+				},
+				"labels": {
+					"type": "array",
+					"minItems": 0,
+					"items": {
+						"type": "object",
+						"required": ["class", "displayName"],
+						"additionalProperties": false,
+						"properties": {
+							"class": {
+								"type": "string",
+								"enum": ["info", "danger"]
+							},
+							"displayName": {
+								"type": "string",
+								"minLength": 1
+							}
+						}
+					}
 				}
 			}
 		},
@@ -493,10 +491,274 @@
 				}
 			}
 		},
+		"data_item_file": {
+						"type": "object",
+			"$ref": "#/$defs/data_item_file--base",
+						"required": [
+							"documentationFiles",
+				"groups"
+						],
+						"properties": {
+							"documentationFiles": {
+								"type": "array",
+								"minItems": 0,
+								"items": {
+									"type": "object",
+									"required": ["displayName", "path"],
+									"additionalProperties": false,
+									"properties": {
+										"displayName": {
+											"type": "string",
+											"minLength": 1
+										},
+										"path": {
+											"type": "string",
+											"pattern": "^(\\\\[A-Za-z0-9][A-Za-z0-9_-]*)+\\.(chm|pdf)$"
+										}
+									}
+								}
+							},
+							"groups": {
+								"type": "array",
+								"minItems": 1,
+								"items": {
+									"type": "object",
+									"required": ["groupId", "groupValueId"],
+									"unevaluatedProperties": false,
+									"oneOf": [
+										{
+											"type": "object",
+											"required": [
+												"groupId",
+												"groupValueId"
+											],
+											"additionalProperties": false,
+											"properties": {
+												"groupId": {
+													"type": "string",
+													"const": "Packages"
+												},
+												"groupValueId": {
+													"type": "string",
+													"enum": [
+														"Authoring",
+														"Documentation",
+														"SDK"
+													]
+												}
+											}
+										},
+										{
+											"type": "object",
+											"required": [
+												"groupId",
+												"groupValueId"
+											],
+											"additionalProperties": false,
+											"properties": {
+												"groupId": {
+													"type": "string",
+													"const": "AuthoringPlatforms"
+												},
+												"groupValueId": {
+													"type": "string",
+													"enum": ["x64"]
+												}
+											}
+										},
+										{
+											"type": "object",
+											"required": [
+												"groupId",
+												"groupValueId"
+											],
+											"additionalProperties": false,
+											"properties": {
+												"groupId": {
+													"type": "string",
+													"const": "AuthoringOS"
+												},
+												"groupValueId": {
+													"type": "string",
+													"enum": ["Windows", "OSX"]
+												}
+											}
+										},
+										{
+											"type": "object",
+											"required": [
+												"groupId",
+												"groupValueId"
+											],
+											"additionalProperties": false,
+											"properties": {
+												"groupId": {
+													"type": "string",
+													"const": "DeploymentPlatforms"
+												},
+												"groupValueId": {
+													"type": "string",
+													"enum": [
+														"WinGC",
+														"Windows_vc160",
+														"Windows_vc170",
+														"Linux",
+														"Android",
+														"iOS",
+														"tvOS",
+														"visionOS",
+														"Mac"
+													]
+												}
+											}
+										}
+									]
+								}
+				}
+			}
+		},
+		"data_item_file--base": {
+			"allOf": [
+				{
+					"type": "object",
+					"required": [
+						"licenses",
+						"sha1",
+						"size",
+						"uncompressedSize"
+					],
+					"properties": {
+							"licenses": {
+								"type": "array",
+								"minItems": 0,
+								"maxItems": 0
+							},
+							"sha1": {
+								"type": "string",
+								"pattern": "^[a-f0-9]{40}$"
+							},
+							"size": {
+								"oneOf": [
+									{
+								"type": "integer",
+								"$comment": "since we're not using ajv-specific keywords, take care to verify uncompressedSize is equal to or greater than size",
+								"minimum": 0
+									},
+									{
+										"type": "string",
+										"pattern": "^\\d+$"
+									}
+								]
+							},
+							"uncompressedSize": {
+								"oneOf": [
+									{
+								"type": "integer",
+								"$comment": "since we're not using ajv-specific keywords, take care to verify uncompressedSize is equal to or greater than size",
+								"minimum": 0
+									},
+									{
+										"type": "string",
+										"pattern": "^\\d+$"
+									}
+								]
+							}
+					}
+				},
+				{
+					"oneOf": [
+						{
+							"type": "object",
+							"required": ["id", "name", "sourceName"],
+							"properties": {
+								"id": {
+									"$ref": "#/$defs/filename_xz"
+								},
+								"name": {
+									"$ref": "#/$defs/filename_xz"
+								},
+								"sourceName": {
+									"$ref": "#/$defs/filename_xz"
+								}
+							}
+						},
+						{
+							"type": "object",
+							"required": ["id", "name", "sourceName"],
+							"properties": {
+								"id": {
+									"$ref": "#/$defs/filename_zip"
+								},
+								"name": {
+									"$ref": "#/$defs/filename_zip"
+								},
+								"sourceName": {
+									"$ref": "#/$defs/filename_zip"
+								}
+							}
+						},
+						{
+							"type": "object",
+							"required": ["id", "name", "sourceName"],
+							"properties": {
+								"id": {
+									"$ref": "#/$defs/filename_pkg"
+								},
+								"name": {
+									"$ref": "#/$defs/filename_pkg"
+								},
+								"sourceName": {
+									"$ref": "#/$defs/filename_pkg"
+								}
+							}
+						},
+						{
+							"type": "object",
+							"required": ["id", "name", "sourceName"],
+							"properties": {
+								"id": {
+									"$ref": "#/$defs/filename_exe"
+								},
+								"name": {
+									"$ref": "#/$defs/filename_exe"
+								},
+								"sourceName": {
+									"$ref": "#/$defs/filename_exe"
+								}
+							}
+						}
+					]
+				}
+			]
+		},
+		"data_item--base": {
+			"type": "object",
+			"required": ["files"],
+			"properties": {
+				"files": {
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"oneOf": [
+							{
+								"type": "object",
+								"unevaluatedProperties": false,
+								"$ref": "#/$defs/data_item_file--base"
+							},
+							{
+								"type": "object",
+								"unevaluatedProperties": false,
+								"$ref": "#/$defs/data_item_file"
+							}
+						]
+					}
+				}
+			}
+		},
 		"data_item": {
 			"type": "object",
-			"$ref": "#/$defs/item",
-			"required": ["eulas", "executables", "files", "groups"],
+			"$ref": "#/$defs/data_item--base",
+			"required": ["eulas", "executables", "groups"],
 			"properties": {
 				"eulas": {
 					"type": "array",
@@ -614,171 +876,6 @@
 							"id": {
 								"type": "string",
 								"minLength": 1
-							}
-						}
-					}
-				},
-				"files": {
-					"type": "array",
-					"minItems": 1,
-					"items": {
-						"type": "object",
-						"required": [
-							"documentationFiles",
-							"groups",
-							"id",
-							"licenses",
-							"name",
-							"sha1",
-							"size",
-							"sourceName",
-							"uncompressedSize"
-						],
-						"additionalProperties": false,
-						"properties": {
-							"documentationFiles": {
-								"type": "array",
-								"minItems": 0,
-								"items": {
-									"type": "object",
-									"required": ["displayName", "path"],
-									"additionalProperties": false,
-									"properties": {
-										"displayName": {
-											"type": "string",
-											"minLength": 1
-										},
-										"path": {
-											"type": "string",
-											"pattern": "^(\\\\[A-Za-z0-9][A-Za-z0-9_-]*)+\\.(chm|pdf)$"
-										}
-									}
-								}
-							},
-							"groups": {
-								"type": "array",
-								"minItems": 1,
-								"items": {
-									"type": "object",
-									"required": ["groupId", "groupValueId"],
-									"unevaluatedProperties": false,
-									"oneOf": [
-										{
-											"type": "object",
-											"required": [
-												"groupId",
-												"groupValueId"
-											],
-											"additionalProperties": false,
-											"properties": {
-												"groupId": {
-													"type": "string",
-													"const": "Packages"
-												},
-												"groupValueId": {
-													"type": "string",
-													"enum": [
-														"Authoring",
-														"Documentation",
-														"SDK"
-													]
-												}
-											}
-										},
-										{
-											"type": "object",
-											"required": [
-												"groupId",
-												"groupValueId"
-											],
-											"additionalProperties": false,
-											"properties": {
-												"groupId": {
-													"type": "string",
-													"const": "AuthoringPlatforms"
-												},
-												"groupValueId": {
-													"type": "string",
-													"enum": ["x64"]
-												}
-											}
-										},
-										{
-											"type": "object",
-											"required": [
-												"groupId",
-												"groupValueId"
-											],
-											"additionalProperties": false,
-											"properties": {
-												"groupId": {
-													"type": "string",
-													"const": "AuthoringOS"
-												},
-												"groupValueId": {
-													"type": "string",
-													"enum": ["Windows", "OSX"]
-												}
-											}
-										},
-										{
-											"type": "object",
-											"required": [
-												"groupId",
-												"groupValueId"
-											],
-											"additionalProperties": false,
-											"properties": {
-												"groupId": {
-													"type": "string",
-													"const": "DeploymentPlatforms"
-												},
-												"groupValueId": {
-													"type": "string",
-													"enum": [
-														"WinGC",
-														"Windows_vc160",
-														"Windows_vc170",
-														"Linux",
-														"Android",
-														"iOS",
-														"tvOS",
-														"visionOS",
-														"Mac"
-													]
-												}
-											}
-										}
-									]
-								}
-							},
-							"id": {
-								"$ref": "#/$defs/filename_compressed"
-							},
-							"licenses": {
-								"type": "array",
-								"minItems": 0,
-								"maxItems": 0
-							},
-							"name": {
-								"$ref": "#/$defs/filename_compressed"
-							},
-							"sha1": {
-								"type": "string",
-								"pattern": "^[a-f0-9]{40}$"
-							},
-							"size": {
-								"type": "integer",
-								"$comment": "since we're not using ajv-specific keywords, take care to verify uncompressedSize is equal to or greater than size",
-								"minimum": 0
-							},
-							"sourceName": {
-								"$ref": "#/$defs/filename_compressed"
-							},
-							"uncompressedSize": {
-								"type": "integer",
-								"$comment": "since we're not using ajv-specific keywords, take care to verify uncompressedSize is equal to or greater than size",
-								"minimum": 0
 							}
 						}
 					}
@@ -904,12 +1001,38 @@
 				{
 					"type": "object",
 					"unevaluatedProperties": false,
-					"$ref": "#/$defs/data_item"
+					"allOf": [
+						{
+							"$ref": "#/$defs/item--base"
+						},
+						{
+							"$ref": "#/$defs/data_item--base"
+						}
+					]
 				},
 				{
 					"type": "object",
 					"unevaluatedProperties": false,
-					"$ref": "#/$defs/data_item_with_redistributables"
+					"allOf": [
+						{
+							"$ref": "#/$defs/item"
+						},
+						{
+							"$ref": "#/$defs/data_item"
+						}
+					]
+				},
+				{
+					"type": "object",
+					"unevaluatedProperties": false,
+					"allOf": [
+						{
+							"$ref": "#/$defs/item"
+						},
+						{
+							"$ref": "#/$defs/data_item_with_redistributables"
+						}
+					]
 				}
 			]
 		}

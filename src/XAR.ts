@@ -1,4 +1,9 @@
+import type {
+	readFile,
+} from 'node:fs/promises';
+
 import decompress from './decompress.ts';
+
 import type integer from './integer.ts';
 
 function naive_parse<
@@ -325,6 +330,7 @@ async function cpio_payload_from_toc(
 export default async function cpio_payload_from_XAR(
 	file: (
 		| Buffer
+		| Exclude<Awaited<ReturnType<typeof readFile>>, string>
 		| ArrayBuffer
 	),
 	decoder: TextDecoder,

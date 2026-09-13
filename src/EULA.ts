@@ -1,5 +1,9 @@
 
 import type {
+	readFile,
+} from 'node:fs/promises';
+
+import type {
 	CpioOdcHeader,
 } from './CPIO.ts';
 import CPIO from './CPIO.ts';
@@ -10,6 +14,7 @@ import cpio_payload_from_XAR from './XAR.ts';
 
 type file_source = (
 	| Buffer
+	| Exclude<Awaited<ReturnType<typeof readFile>>, string>
 	| ArrayBuffer
 );
 

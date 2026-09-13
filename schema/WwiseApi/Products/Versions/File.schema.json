@@ -1,0 +1,27 @@
+{
+	"$id": "https://satisfactory.dev/ak-launcher/WwiseApi/Products/Versions/File.schema.json",
+	"type": "object",
+	"required": ["statusCode", "data"],
+	"additionalProperties": false,
+	"properties": {
+		"statusCode": {
+			"type": "integer",
+			"const": 200
+		},
+		"data": {
+			"type": "object",
+			"required": ["id", "url"],
+			"additionalProperties": false,
+			"properties": {
+				"id": {
+					"type": "string",
+					"minLength": 1
+				},
+				"url": {
+					"type": "string",
+					"pattern": "^https:\/\/blob-api-builds.gowwise.com\/\\d+\\.\\d+\\.\\d+_\\d+\/[^\\/\\?]+\\?Expires=\\d+&Policy=[A-Za-z0-9_~-]+&Signature=[A-Za-z0-9_~-]+&Key-Pair-Id=[A-Z0-9]+$"
+				}
+			}
+		}
+	}
+}
