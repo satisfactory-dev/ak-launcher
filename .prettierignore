@@ -2,6 +2,7 @@
 package-lock.json
 package.json
 LICENSE.md
+README.md
 **/*.ts
 **/*.js
 **/*.mjs
