@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@satisfactory-dev/ak-launcher",
-  "description": "A workaround for the AudioKinetic Launcher not being easy to run in a devcontainer",
+  "description": "A workaround for the Audiokinetic Launcher not being easy to run in a devcontainer",
   "keywords": [
     "wwise",
     "wwise-cli",
