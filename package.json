@@ -16,8 +16,20 @@
     "url": "git+https://github.com/satisfactory-dev/ak-launcher.git"
   },
   "funding": "https://github.com/satisfactory-dev/ak-launcher?sponsor=1",
-  "exports": "./index.js",
-  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "default": "./index.js",
+      "types": "./index.d.ts"
+    },
+    "./schema": {
+      "default": "./schema.js",
+      "types": "./schema.d.ts"
+    },
+    "./validators": {
+      "default": "./validators.js",
+      "types": "./validators.d.ts"
+    }
+  },
   "scripts": {
     "prepare": "node ./generate-const-types.ts"
   },
