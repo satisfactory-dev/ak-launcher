@@ -2,6 +2,5 @@
 	"extends": "./tsconfig.app",
 	"compilerOptions": {
 		"noEmit": true
-	},
-	"include": ["./src/*.ts", "./tests/src/*.ts", "./*.ts"]
+	}
 }

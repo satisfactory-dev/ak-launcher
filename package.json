@@ -30,6 +30,15 @@
       "types": "./validators.d.ts"
     }
   },
+  "files": [
+    "./schema/**/*.js",
+    "./schema/**/*.d.ts",
+    "./schema/**/*.json",
+    "./src/**/*.js",
+    "./src/**/*.d.ts",
+    "./*.js",
+    "./*.d.ts"
+  ],
   "scripts": {
     "prepare": "node ./generate-const-types.ts"
   },

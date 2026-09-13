@@ -1,4 +1,10 @@
 {
 	"extends": "./tsconfig",
-	"include": ["./src/*.ts", "./index.ts"]
+	"include": [
+		"./schema/**/*.ts",
+		"./src/**/*.ts",
+		"./index.ts",
+		"./schema.ts",
+		"./validators.ts"
+	]
 }
