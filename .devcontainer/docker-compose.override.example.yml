@@ -1,0 +1,11 @@
+services:
+    devcontainer:
+        userns_mode: keep-id
+        volumes:
+            - ~/.gitconfig:/home/vscode/.gitconfig:Z
+        environment:
+            - GIT_EDITOR=codium --wait
+
+volumes:
+    npm-cache:
+        external: true

@@ -1,9 +1,13 @@
 {
 	"name": "@satisfactory-dev/ak-launcher",
-	"dockerComposeFile": "./docker-compose.yml",
+	"dockerComposeFile": [
+		"./docker-compose.yml",
+		"./docker-compose.override.yml"
+	],
 	"service": "devcontainer",
 	"workspaceFolder": "/app/",
-	"postCreateCommand": "npm config set git-tag-version=false && npm install",
+	"postCreateCommand": ". ~/.nvm.envrc && npm config set git-tag-version=false && npm install",
+	"updateContentCommand": "sudo chown -R vscode:vscode /app/",
 	"remoteUser": "vscode",
 	"updateRemoteUserUID": true,
 	"customizations": {
@@ -32,8 +36,5 @@
 		}
 	},
 	"features": {
-		"ghcr.io/devcontainers/features/node:2": {
-			"version": "26"
-		}
 	}
 }

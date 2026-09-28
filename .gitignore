@@ -5,3 +5,4 @@
 /.eslintcache
 /coverage/
 /schema/**/*.ts
+/.devcontainer/docker-compose.override.yml
