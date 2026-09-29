@@ -871,6 +871,7 @@ export default class Versions extends AbstractApi {
 		category: BundleType & (
 			| 'wwise'
 			| 'Launcher'
+			| 'UnrealIntegration'
 		),
 		validate_verified_payload: (
 			maybe: unknown,
