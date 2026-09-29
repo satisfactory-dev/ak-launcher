@@ -58,14 +58,25 @@
 				"IS_USING_ROOT_LIBRARY": {
 					"type": "boolean"
 				},
+				"skipWinePrefix": {
+					"type": "boolean",
+					"const": true
+				},
 				"minimumRequiredVersion": {
+					"$ref": "#/$defs/minimumRequiredVersion"
+				}
+			}
+		},
+		"minimumRequiredVersion": {
+			"oneOf": [
+				{
 					"type": "object",
 					"required": ["major", "minor"],
 					"additionalProperties": false,
 					"properties": {
 						"major": {
 							"type": "integer",
-							"minimum": 10
+							"minimum": 0
 						},
 						"minor": {
 							"type": "integer",
@@ -73,11 +84,22 @@
 						}
 					}
 				},
-				"skipWinePrefix": {
-					"type": "boolean",
-					"const": true
+				{
+					"type": "object",
+					"required": ["major", "minor"],
+					"additionalProperties": false,
+					"properties": {
+						"major": {
+							"type": "string",
+							"pattern": "^\\d+$"
+						},
+						"minor": {
+							"type": "string",
+							"pattern": "^\\d+$"
+						}
+					}
 				}
-			}
+			]
 		},
 		"plugins": {
 			"type": "object",
@@ -98,6 +120,38 @@
 							"minimum": 2000
 						}
 					}
+				}
+			}
+		},
+		"sdkPlatformFolder--base": {
+			"type": "object",
+			"required": [
+				"destination",
+				"optional",
+				"source"
+			],
+			"properties": {
+				"destination": {
+					"type": "string",
+					"minLength": 1
+				},
+				"optional": {
+					"type": "boolean"
+				},
+				"source": {
+					"type": "string",
+					"minLength": 1
+				}
+			}
+		},
+		"sdkPlatformFolder--fileMatchExpression": {
+			"type": "object",
+			"$ref": "#/$defs/sdkPlatformFolder--base",
+			"required": ["fileMatchExpression"],
+			"properties": {
+				"fileMatchExpression": {
+					"type": "string",
+					"minLength": 1
 				}
 			}
 		},
@@ -125,8 +179,15 @@
 					"minLength": 1
 				},
 				"tag": {
+					"oneOf": [
+						{
 					"type": "string",
 					"minLength": 1
+						},
+						{
+							"type": "null"
+						}
+					]
 				},
 				"type": {
 					"type": "string",
@@ -222,6 +283,176 @@
 									"$ref": "#/$defs/plugins"
 								}
 							}
+						},
+						{
+							"type": "object",
+							"$ref": "#/$defs/item--productDependentData--UnrealIntegration--base",
+							"required": [
+								"sdkPlatformFolders"
+							],
+							"unevaluatedProperties": false,
+							"properties": {
+								"sdkPlatformFolders": {
+									"type": "object",
+									"minProperties": 1,
+									"additionalProperties": {
+										"type": "array",
+										"minItems": 1,
+										"items": {
+											"oneOf": [
+												{
+													"type": "object",
+													"$ref": "#/$defs/sdkPlatformFolder--base",
+													"unevaluatedProperties": false,
+													"required": ["include"],
+													"properties": {
+														"include": {
+															"type": "array",
+															"minItems": 1,
+															"items": {
+																"type": "string",
+																"minLength": 1
+															}
+														}
+													}
+												},
+												{
+													"type": "object",
+													"$ref": "#/$defs/sdkPlatformFolder--fileMatchExpression",
+													"unevaluatedProperties": false
+												},
+												{
+													"type": "object",
+													"$ref": "#/$defs/sdkPlatformFolder--fileMatchExpression",
+													"unevaluatedProperties": false,
+													"required": ["untilEngine"],
+													"properties": {
+														"untilEngine": {
+															"$ref": "#/$defs/minimumRequiredVersion"
+														}
+													}
+												},
+												{
+													"type": "object",
+													"$ref": "#/$defs/sdkPlatformFolder--fileMatchExpression",
+													"unevaluatedProperties": false,
+													"required": ["sinceEngine "],
+													"properties": {
+														"sinceEngine ": {
+															"$ref": "#/$defs/minimumRequiredVersion"
+														}
+													}
+												}
+											]
+										}
+									}
+								}
+							}
+						},
+						{
+							"type": "object",
+							"$ref": "#/$defs/item--productDependentData--UnrealIntegration--base",
+							"required": [
+								"platformFolders"
+							],
+							"unevaluatedProperties": false,
+							"properties": {
+								"platformFolders": {
+									"type": "object",
+									"required": [
+										"mandatory",
+										"optional"
+									],
+									"additionalProperties": false,
+									"properties": {
+										"mandatory": {
+											"type": "array",
+											"minItems": 1,
+											"items": {
+												"type": "string",
+												"enum": [
+													"include",
+													"Win32_vc140",
+													"Win32_vc150",
+													"Win32_vc160",
+													"Win32_vc170",
+													"x64_vc140",
+													"x64_vc150",
+													"x64_vc160",
+													"x64_vc170",
+													"Mac"
+												]
+											}
+										},
+										"optional": {
+											"type": "array",
+											"minItems": 1,
+											"items": {
+												"type": "string",
+												"enum": [
+													"Win32_vc140",
+													"Win32_vc150",
+													"Win32_vc160",
+													"Win32_vc170",
+													"x64_vc140",
+													"x64_vc150",
+													"x64_vc170",
+													"WinGC_vc150",
+													"WinGC_vc160",
+													"WinGC_vc170",
+													"UWP_ARM64_vc150",
+													"UWP_ARM64_vc160",
+													"UWP_ARM64_vc170",
+													"Linux_x32",
+													"Linux_x64",
+													"Linux_aarch64",
+													"XboxOne_vc110",
+													"XboxOne_vc140",
+													"XboxOne_vc150",
+													"XboxOne_vc160",
+													"XboxOneGC_vc150",
+													"XboxOneGC_vc160",
+													"XboxOneGC_vc170",
+													"PS4",
+													"PS4_SDK9.500",
+													"PS4_SDK10.000",
+													"PS4_SDK10.500",
+													"NX64",
+													"NX64_SDK15",
+													"NX64_SDK16",
+													"GGP",
+													"Android_armeabi-v7a",
+													"Android_x86",
+													"Android_arm64-v8a",
+													"android-9_armeabi-v7a",
+													"android-21_arm64-v8a",
+													"android-21_x86_64",
+													"android-9_x86",
+													"Android_x86_64",
+													"iOS",
+													"tvOS",
+													"PS5",
+													"PS5_SDK5.000",
+													"PS5_SDK6.000",
+													"PS5_SDK7.000",
+													"XboxSeriesX_vc150",
+													"XboxSeriesX_vc160",
+													"XboxSeriesX_vc170",
+													"Mac",
+													"Lumin",
+													"Pellegrino",
+													"Chinook_vc150",
+													"Chinook_vc160",
+													"GX_vc150",
+													"GX_vc160",
+													"GDX_vc150",
+													"GDX_vc160"
+												]
+											}
+										}
+									}
+								}
+							}
 						}
 					]
 				},
@@ -268,6 +499,56 @@
 					}
 				}
 			}
+		},
+		"item--productDependentData--UnrealIntegration--base": {
+			"type": "object",
+			"required": [
+				"supportedPlatforms",
+				"supportedUnrealVersions",
+				"wwiseSdkBuild"
+			],
+			"properties": {
+				"supportedPlatforms": {
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"type": "string",
+						"enum": [
+							"Android",
+							"Linux",
+							"Mac",
+							"iOS",
+							"tvOS",
+							"PS4",
+							"PS5",
+							"Switch",
+							"Switch2",
+							"Windows",
+							"WinGC",
+							"UWP",
+							"XboxOne",
+							"XboxOneGC",
+							"XboxSerisX",
+							"XboxSeriesX",
+							"Stadia",
+							"Lumin",
+							"Pellegrino"
+						]
+					}
+				},
+				"supportedUnrealVersions": {
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"$ref": "#/$defs/minimumRequiredVersion"
+					}
+				},
+				"wwiseSdkBuild": {
+					"type": "integer",
+					"minimum": 0
+				}
+			}
+
 		},
 		"data_groups_item_values_item": {
 			"type": "object",

@@ -26,12 +26,20 @@ type Link = {
 	url: `https://${Exclude<string, ''>}`,
 };
 
-type MacOS = {
-	IS_USING_ROOT_LIBRARY: boolean,
-	minimumRequiredVersion: {
+type minimumRequiredVersion = (
+	| {
 		major: number,
 		minor: number,
-	},
+	}
+	| {
+		major: `${number}`,
+		minor: `${number}`,
+	}
+);
+
+type MacOS = {
+	IS_USING_ROOT_LIBRARY: boolean,
+	minimumRequiredVersion: minimumRequiredVersion,
 };
 
 type ProductDependentData = {
@@ -47,6 +55,190 @@ type ProductDependentDataWithPlugins = (
 				year: number,
 			},
 		},
+	}
+);
+
+type ProductDependentDataUnrealIntegration_supportedPlatforms_value = (
+	| 'Android'
+	| 'Linux'
+	| 'Mac'
+	| 'iOS'
+	| 'tvOS'
+	| 'PS4'
+	| 'PS5'
+	| 'Switch'
+	| 'Switch2'
+	| 'Windows'
+	| 'WinGC'
+	| 'UWP'
+	| 'XboxOne'
+	| 'XboxOneGC'
+	| 'XboxSerisX'
+	| 'XboxSeriesX'
+	| 'Stadia'
+	| 'Lumin'
+	| 'Pellegrino'
+);
+
+type ProductDependentDataUnrealIntegration_base = {
+	supportedPlatforms: [
+		ProductDependentDataUnrealIntegration_supportedPlatforms_value,
+		...ProductDependentDataUnrealIntegration_supportedPlatforms_value[],
+	],
+	supportedUnrealVersions: [
+		minimumRequiredVersion,
+		...minimumRequiredVersion[],
+	],
+	wwiseSdkBuild: number,
+};
+
+type ProductDependentDataUnrealIntegration_sdkPlatformFolders = (
+	& ProductDependentDataUnrealIntegration_base
+	& {
+		sdkPlatformFolders: (
+			| [
+				sdkPlatformFolder_include,
+				...sdkPlatformFolder_include[],
+			]
+			| [
+				sdkPlatformFolder_fileMatchExpression,
+				...sdkPlatformFolder_fileMatchExpression[],
+			]
+			| [
+				sdkPlatformFolder_fileMatchExpression_with_untilEngine,
+				...sdkPlatformFolder_fileMatchExpression_with_untilEngine[],
+			]
+			| [
+				sdkPlatformFolder_fileMatchExpression_with_sinceEngine,
+				...sdkPlatformFolder_fileMatchExpression_with_sinceEngine[],
+			]
+		),
+	}
+);
+
+type ProductDependentDataUnrealIntegration_platformFolders_mandatory_item = (
+	| 'include'
+	| 'Win32_vc140'
+	| 'Win32_vc150'
+	| 'Win32_vc160'
+	| 'Win32_vc170'
+	| 'x64_vc140'
+	| 'x64_vc150'
+	| 'x64_vc160'
+	| 'x64_vc170'
+	| 'Mac'
+);
+
+type ProductDependentDataUnrealIntegration_platformFolders_optional_item = (
+	| 'Win32_vc140'
+	| 'Win32_vc150'
+	| 'Win32_vc160'
+	| 'Win32_vc170'
+	| 'x64_vc140'
+	| 'x64_vc150'
+	| 'x64_vc170'
+	| 'WinGC_vc150'
+	| 'WinGC_vc160'
+	| 'WinGC_vc170'
+	| 'UWP_ARM64_vc150'
+	| 'UWP_ARM64_vc160'
+	| 'UWP_ARM64_vc170'
+	| 'Linux_x32'
+	| 'Linux_x64'
+	| 'Linux_aarch64'
+	| 'XboxOne_vc110'
+	| 'XboxOne_vc140'
+	| 'XboxOne_vc150'
+	| 'XboxOne_vc160'
+	| 'XboxOneGC_vc150'
+	| 'XboxOneGC_vc160'
+	| 'XboxOneGC_vc170'
+	| 'PS4'
+	| 'PS4_SDK9.500'
+	| 'PS4_SDK10.000'
+	| 'PS4_SDK10.500'
+	| 'NX64'
+	| 'NX64_SDK15'
+	| 'NX64_SDK16'
+	| 'GGP'
+	| 'Android_armeabi-v7a'
+	| 'Android_x86'
+	| 'Android_arm64-v8a'
+	| 'android-9_armeabi-v7a'
+	| 'android-21_arm64-v8a'
+	| 'android-21_x86_64'
+	| 'android-9_x86'
+	| 'Android_x86_64'
+	| 'iOS'
+	| 'tvOS'
+	| 'PS5'
+	| 'PS5_SDK5.000'
+	| 'PS5_SDK6.000'
+	| 'PS5_SDK7.000'
+	| 'XboxSeriesX_vc150'
+	| 'XboxSeriesX_vc160'
+	| 'XboxSeriesX_vc170'
+	| 'Mac'
+	| 'Lumin'
+	| 'Pellegrino'
+	| 'Chinook_vc150'
+	| 'Chinook_vc160'
+	| 'GX_vc150'
+	| 'GX_vc160'
+	| 'GDX_vc150'
+	| 'GDX_vc160'
+);
+
+type ProductDependentDataUnrealIntegration_platformFolders = (
+	& ProductDependentDataUnrealIntegration_base
+	& {
+		platformFolders: {
+			mandatory: [
+				ProductDependentDataUnrealIntegration_platformFolders_mandatory_item,
+				...ProductDependentDataUnrealIntegration_platformFolders_mandatory_item[],
+			],
+			optional: [
+				ProductDependentDataUnrealIntegration_platformFolders_optional_item,
+				...ProductDependentDataUnrealIntegration_platformFolders_optional_item[],
+			],
+		},
+	}
+);
+
+type sdkPlatformFolder_base = {
+	destination: Exclude<string, ''>,
+	option: boolean,
+	source: Exclude<string, ''>,
+};
+
+type sdkPlatformFolder_include = (
+	& sdkPlatformFolder_base
+	& {
+		include: [
+			Exclude<string, ''>,
+			...Exclude<string, ''>[],
+		],
+	}
+);
+
+type sdkPlatformFolder_fileMatchExpression = (
+	& sdkPlatformFolder_base
+	& {
+		fileMatchExpression: Exclude<string, ''>,
+	}
+);
+
+type sdkPlatformFolder_fileMatchExpression_with_untilEngine = (
+	& sdkPlatformFolder_fileMatchExpression
+	& {
+		untilEngine: minimumRequiredVersion,
+	}
+);
+
+type sdkPlatformFolder_fileMatchExpression_with_sinceEngine = (
+	& sdkPlatformFolder_fileMatchExpression
+	& {
+		sinceEngine: minimumRequiredVersion,
 	}
 );
 
@@ -66,7 +258,7 @@ export type nicknamed_version<
 
 type VersionCommonBase = {
 	id: Exclude<string, ''>,
-	tag: Exclude<string, ''>,
+	tag: Exclude<string, ''>|null,
 	type: Exclude<string, ''>,
 	name: Exclude<string, ''>,
 	productDependentData: (
@@ -87,6 +279,8 @@ type VersionCommonBase = {
 				),
 			}
 		)
+		| ProductDependentDataUnrealIntegration_sdkPlatformFolders
+		| ProductDependentDataUnrealIntegration_platformFolders
 	),
 	vendor: Exclude<string, ''>,
 	version: nicknamed_version<Exclude<string, ''>>,
