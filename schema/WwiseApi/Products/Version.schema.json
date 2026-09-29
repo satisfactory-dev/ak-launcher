@@ -125,11 +125,7 @@
 		},
 		"sdkPlatformFolder--base": {
 			"type": "object",
-			"required": [
-				"destination",
-				"optional",
-				"source"
-			],
+			"required": ["destination", "optional", "source"],
 			"properties": {
 				"destination": {
 					"type": "string",
@@ -181,8 +177,8 @@
 				"tag": {
 					"oneOf": [
 						{
-					"type": "string",
-					"minLength": 1
+							"type": "string",
+							"minLength": 1
 						},
 						{
 							"type": "null"
@@ -287,9 +283,7 @@
 						{
 							"type": "object",
 							"$ref": "#/$defs/item--productDependentData--UnrealIntegration--base",
-							"required": [
-								"sdkPlatformFolders"
-							],
+							"required": ["sdkPlatformFolders"],
 							"unevaluatedProperties": false,
 							"properties": {
 								"sdkPlatformFolders": {
@@ -325,7 +319,9 @@
 													"type": "object",
 													"$ref": "#/$defs/sdkPlatformFolder--fileMatchExpression",
 													"unevaluatedProperties": false,
-													"required": ["untilEngine"],
+													"required": [
+														"untilEngine"
+													],
 													"properties": {
 														"untilEngine": {
 															"$ref": "#/$defs/minimumRequiredVersion"
@@ -336,7 +332,9 @@
 													"type": "object",
 													"$ref": "#/$defs/sdkPlatformFolder--fileMatchExpression",
 													"unevaluatedProperties": false,
-													"required": ["sinceEngine "],
+													"required": [
+														"sinceEngine "
+													],
 													"properties": {
 														"sinceEngine ": {
 															"$ref": "#/$defs/minimumRequiredVersion"
@@ -352,17 +350,12 @@
 						{
 							"type": "object",
 							"$ref": "#/$defs/item--productDependentData--UnrealIntegration--base",
-							"required": [
-								"platformFolders"
-							],
+							"required": ["platformFolders"],
 							"unevaluatedProperties": false,
 							"properties": {
 								"platformFolders": {
 									"type": "object",
-									"required": [
-										"mandatory",
-										"optional"
-									],
+									"required": ["mandatory", "optional"],
 									"additionalProperties": false,
 									"properties": {
 										"mandatory": {
@@ -548,7 +541,6 @@
 					"minimum": 0
 				}
 			}
-
 		},
 		"data_groups_item_values_item": {
 			"type": "object",
